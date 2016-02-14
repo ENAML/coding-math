@@ -30,7 +30,7 @@ var utils = {
 
   /**
    * Map:
-   * Converts a normalized value in one range into
+   * Converts a value in one range into
    * the corresponding value in another range
    */
   map: function(val, sourceMin, sourceMax, destMin, destMax) {
@@ -142,6 +142,41 @@ var utils = {
    */
   randomInt: function(min, max) {
     return Math.floor(min + Math.random() * (max - min + 1));
+  },
+
+  /**
+   * Random Distribution:
+   * Returns a weighted random number based on the number of
+   * iterations (the higher the iterations, the higher the
+   * chance that the number returned will be in the middle
+   * of the range).
+   */
+  randomDist: function(min, max, iterations) {
+    var total = 0;
+
+    for (var i = 0; i < iterations; i++) {
+      total += this.randomRange(min, max);
+    }
+
+    return total / iterations;
+  },
+
+
+  /**
+   * Degrees to Radians:
+   * Calculates radians from degrees
+   */
+  degreesToRads: function(degrees) {
+    return degrees / 180 * Math.PI;
+  },
+  
+
+  /**
+   * Radians to Degrees:
+   * Calculates degrees from radians
+   */
+  radsToDegrees: function(radians) {
+    return radians * 180 / Math.PI;
   },
 };
 

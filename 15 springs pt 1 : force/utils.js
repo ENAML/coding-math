@@ -143,6 +143,23 @@ var utils = {
   randomInt: function(min, max) {
     return Math.floor(min + Math.random() * (max - min + 1));
   },
+
+  /**
+   * Degrees to Radians:
+   * Calculates radians from degrees
+   */
+  degreesToRads: function(degrees) {
+    return degrees / 180 * Math.PI;
+  },
+  
+
+  /**
+   * Radians to Degrees:
+   * Calculates degrees from radians
+   */
+  radsToDegrees: function(radians) {
+    return radians * 180 / Math.PI;
+  },
 };
 
 

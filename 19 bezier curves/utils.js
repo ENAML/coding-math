@@ -30,7 +30,7 @@ var utils = {
 
   /**
    * Map:
-   * Converts a normalized value in one range into
+   * Converts a value in one range into
    * the corresponding value in another range
    */
   map: function(val, sourceMin, sourceMax, destMin, destMax) {
@@ -143,6 +143,116 @@ var utils = {
   randomInt: function(min, max) {
     return Math.floor(min + Math.random() * (max - min + 1));
   },
+
+  /**
+   * Random Distribution:
+   * Returns a weighted random number based on the number of
+   * iterations (the higher the iterations, the higher the
+   * chance that the number returned will be in the middle
+   * of the range).
+   */
+  randomDist: function(min, max, iterations) {
+    var total = 0;
+
+    for (var i = 0; i < iterations; i++) {
+      total += this.randomRange(min, max);
+    }
+
+    return total / iterations;
+  },
+
+
+  roundToPlaces: function(value, places) {
+    var mult = Math.pow(10, places);
+    return Math.round(value * mult) / mult;
+  },
+
+  roundNearest: function(value, nearest) {
+    return Math.round(value / nearest) * nearest;
+  },
+
+
+  /**
+   * Degrees to Radians:
+   * Calculates radians from degrees
+   */
+  degreesToRads: function(degrees) {
+    return degrees / 180 * Math.PI;
+  },
+  
+
+  /**
+   * Radians to Degrees:
+   * Calculates degrees from radians
+   */
+  radsToDegrees: function(radians) {
+    return radians * 180 / Math.PI;
+  },
+
+
+  /**
+   * Quadratic Bezier Curve:
+   * Two end points and one control point inbetween.
+   * Standard function for computing quadratic
+   * bezier curves. Basically just a super simplified
+   * combination of linear interpolations
+   */
+  quadraticBezier: function(p0, p1, p2, t, pFinal) {
+    pFinal = pFinal || {};
+    pFinal.x = Math.pow(1 - t, 2) * p0.x + 
+           (1 - t) * 2 * t * p1.x + 
+           t * t * p2.x;
+    pFinal.y = Math.pow(1 - t, 2) * p0.y + 
+           (1 - t) * 2 * t * p1.y + 
+           t * t * p2.y;
+    return pFinal;
+  },
+
+  /**
+   * Cubic Bezier Curve:
+   * Two end points and two control point inbetween.
+   */
+  cubicBezier: function(p0, p1, p2, p3, t, pFinal) {
+    pFinal = pFinal || {};
+    pFinal.x = Math.pow(1 - t, 3) * p0.x + 
+           Math.pow(1 - t, 2) * 3 * t * p1.x + 
+           (1 - t) * 3 * t * t * p2.x + 
+           t * t * t * p3.x;
+    pFinal.y = Math.pow(1 - t, 3) * p0.y + 
+           Math.pow(1 - t, 2) * 3 * t * p1.y + 
+           (1 - t) * 3 * t * t * p2.y + 
+           t * t * t * p3.y;
+    return pFinal;
+  }
+
+  /**
+   * Multi Curve Draw:
+   * Draws a series of connected quadratic curves. Gives
+   * the illusion of being a bezier curve with many mid-points
+   * but not actually 100% accurate. Often good enough though.
+   */
+  multicurve: function(points, context) {
+    var p0, p1, midx, midy;
+
+    context.moveTo(points[0].x, points[0].y);
+
+    for(var i = 1; i < points.length - 2; i += 1) {
+      p0 = points[i];
+      p1 = points[i + 1];
+      midx = (p0.x + p1.x) / 2;
+      midy = (p0.y + p1.y) / 2;
+      context.quadraticCurveTo(p0.x, p0.y, midx, midy);
+    }
+    p0 = points[points.length - 2];
+    p1 = points[points.length - 1];
+    context.quadraticCurveTo(p0.x, p0.y, p1.x, p1.y);
+  }
+
+
+
+
+
+
 };
 
 
